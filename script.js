@@ -15,7 +15,7 @@ function main() {
     CONTEXT = CANVAS.getContext("2d");
     addEventListeners();
 
-
+//Video handler
     let promise = navigator.mediaDevices.getUserMedia({
         video:true
     });
@@ -55,24 +55,27 @@ function setDifficulty() {
     
 }
 
+//refreshes the time and randomizes pieces
 function restart() {
     START_TIME = new Date().getTime();
     END_TIME = null;
     randomizePieces();
 }
 
+//
 function updateTime(){
     let now = new Date().getTime();
     if(START_TIME != null) {
         if(END_TIME != null) {
-        document.getElementById('time').innerHTML = formatTime(END_TIME - START_TIME);
+            document.getElementById('time').innerHTML = formatTime(END_TIME - START_TIME);
         }
         else{
-        document.getElementById('time').innerHTML = formatTime(now - START_TIME);
+            document.getElementById('time').innerHTML = formatTime(now - START_TIME);
         }
     }
 }
 
+//LOOP to see if all pieves are in the correct spot
 function isComplete() {
     for(let i = 0;i < PIECES.length;i++) {
         if(PIECES[i].correct == false) {
@@ -121,6 +124,7 @@ function onMouseDown(evt) {
     }
 }
 
+//changing coords for the piece while it's being dragged
 function onMouseMove(evt) {
     console.log('mouse move')
     if(SELECTED_PIECE != null) {
@@ -129,6 +133,7 @@ function onMouseMove(evt) {
     }
 }
 
+//seeing if the piece is close and if it's within the defined radius it snaps in place
 function onMouseUp(evt) {
     if(SELECTED_PIECE.isClose()) {
         SELECTED_PIECE.snap();
@@ -140,18 +145,23 @@ function onMouseUp(evt) {
     SELECTED_PIECE = null;
 }
 
+//check to see if piece is in the area user clicked
 function getPressedPiece(loc){
     console.log('getPressedPiece initiated')
     //iterates over array backwards
     for(let i=PIECES.length-1; i >= 0; i--) {
         console.log('for loop running')
-        if(loc.x > PIECES[i].x && loc.x < PIECES[i].x + PIECES[i].width && loc.y > PIECES[i].y && loc.y < PIECES[i].y + PIECES[i].height){
+        if(loc.x > PIECES[i].x && 
+           loc.x < PIECES[i].x + PIECES[i].width && 
+           loc.y > PIECES[i].y && 
+           loc.y < PIECES[i].y + PIECES[i].height){
             console.log('piece selected and logged');
             return PIECES[i];
         }
     }
     return null;
 }
+
 
 function handleResize(){
     CANVAS.width = window.innerWidth;
@@ -169,6 +179,7 @@ function handleResize(){
         window.addEventListener('resize', handleResize);
 }
 
+//main game loop
 function updateGame(){
     CONTEXT.clearRect(0,0,CANVAS.width,CANVAS.height);
 
